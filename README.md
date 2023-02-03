@@ -45,6 +45,18 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Running the database
+
+Ignore use of `sudo` if your user is in the docker group
+
+```bash
+# to start the db
+sudo docker-compose up -d
+
+# to stop the db
+sudo docker-compose stop
+```
+
 ## Test
 
 ```bash
