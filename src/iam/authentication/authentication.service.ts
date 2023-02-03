@@ -26,9 +26,12 @@ export class AuthenticationService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signup({ email, password }: SignUpDto) {
+  async signup(newUser: SignUpDto) {
+    const { email, password, state, username } = newUser;
     try {
       const user = new User();
+      user.username = username;
+      user.state = state;
       user.email = email;
       user.password = await this.hashingService.hash(password);
 
@@ -45,6 +48,7 @@ export class AuthenticationService {
 
   async signin({ email, password }: SignInDto) {
     const user = await this.userRepo.findOneBy({ email });
+    console.log('FOUND USER: ', user);
 
     if (!user) {
       throw new UnauthorizedException('Username or password is incorrect');
@@ -65,7 +69,7 @@ export class AuthenticationService {
         email: user.email,
       } as ActiveUserData,
       {
-        audience: this.jwtConfiguration.audience,
+        //audience: this.jwtConfiguration.audience,
         issuer: this.jwtConfiguration.issuer,
         secret: this.jwtConfiguration.secret,
         expiresIn: this.jwtConfiguration.accessTokenTtl,
